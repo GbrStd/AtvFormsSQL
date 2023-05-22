@@ -128,5 +128,65 @@ namespace AtvFormsComp.repository
             return clienteList;
         }
 
+        public static void Update(Cliente cliente)
+        {
+            SqlConnection connection = AppSQLConnection.GetConnection();
+
+            string strUpdateCliente = @"UPDATE Cliente SET Nome = @Nome, Telefone = @Telefone WHERE Id = @Id;";
+            SqlCommand updateCliente = new SqlCommand(strUpdateCliente, connection);
+
+            updateCliente.Parameters.Add(new SqlParameter("@Id", cliente.Id));
+            updateCliente.Parameters.Add(new SqlParameter("@Nome", cliente.Nome));
+            updateCliente.Parameters.Add(new SqlParameter("@Telefone", cliente.Telefone));
+
+            updateCliente.ExecuteNonQuery();
+
+            string strUpdateEndereco = @"UPDATE Endereco SET Logradouro = @Logradouro, Numero = @Numero, Cidade = @Cidade, Estado = @Estado, Pais = @Pais WHERE ClienteId = @ClienteId;";
+            SqlCommand updateEndereco = new SqlCommand(strUpdateEndereco, connection);
+
+            updateEndereco.Parameters.Add(new SqlParameter("@ClienteId", cliente.Id));
+            updateEndereco.Parameters.Add(new SqlParameter("@Logradouro", cliente.Endereco.Logradouro));
+            updateEndereco.Parameters.Add(new SqlParameter("@Numero", cliente.Endereco.Numero));
+            updateEndereco.Parameters.Add(new SqlParameter("@Cidade", cliente.Endereco.Cidade));
+            updateEndereco.Parameters.Add(new SqlParameter("@Estado", cliente.Endereco.Estado));
+            updateEndereco.Parameters.Add(new SqlParameter("@Pais", cliente.Endereco.Pais));
+
+            updateEndereco.ExecuteNonQuery();
+
+            string strUpdateSegmento = @"UPDATE Segmento SET Descricao = @Descricao WHERE Id = @Id;";
+            SqlCommand updateSegmento = new SqlCommand(strUpdateSegmento, connection);
+
+            updateSegmento.Parameters.Add(new SqlParameter("@Id", cliente.Segmento.Id));
+            updateSegmento.Parameters.Add(new SqlParameter("@Descricao", cliente.Segmento.Descricao));
+
+            updateSegmento.ExecuteNonQuery();
+
+            updateSegmento.Dispose();
+            updateEndereco.Dispose();
+            updateCliente.Dispose();
+
+            connection.Close();
+        }
+
+        public static void DeleteById(int id)
+        {
+            SqlConnection connection = AppSQLConnection.GetConnection();
+
+            string strDeleteEndereco = @"DELETE FROM Endereco WHERE ClienteId = @ClienteId;";
+            SqlCommand deleteEndereco = new SqlCommand(strDeleteEndereco, connection);
+            deleteEndereco.Parameters.Add(new SqlParameter("@ClienteId", id));
+            deleteEndereco.ExecuteNonQuery();
+
+            string strDeleteCliente = @"DELETE FROM Cliente WHERE Id = @Id;";
+            SqlCommand deleteCliente = new SqlCommand(strDeleteCliente, connection);
+            deleteCliente.Parameters.Add(new SqlParameter("@Id", id));
+            deleteCliente.ExecuteNonQuery();
+
+            deleteCliente.Dispose();
+            deleteEndereco.Dispose();
+
+            connection.Close();
+        }
+
     }
 }

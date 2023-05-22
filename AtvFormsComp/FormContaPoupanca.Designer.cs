@@ -49,6 +49,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.txtBonusDescricao = new System.Windows.Forms.TextBox();
             this.txtTipoContaDescricao = new System.Windows.Forms.TextBox();
+            this.btnAtualizar = new System.Windows.Forms.Button();
+            this.btnDeletar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvContaPoupanca)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -81,12 +83,15 @@
             // dgvContaPoupanca
             // 
             this.dgvContaPoupanca.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvContaPoupanca.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvContaPoupanca.Location = new System.Drawing.Point(13, 291);
             this.dgvContaPoupanca.Margin = new System.Windows.Forms.Padding(4);
             this.dgvContaPoupanca.Name = "dgvContaPoupanca";
             this.dgvContaPoupanca.RowHeadersWidth = 51;
             this.dgvContaPoupanca.Size = new System.Drawing.Size(1003, 261);
             this.dgvContaPoupanca.TabIndex = 22;
+            this.dgvContaPoupanca.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvContaPoupanca_CellContentClick);
+            this.dgvContaPoupanca.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvContaPoupanca_CellContentClick);
             // 
             // groupBox2
             // 
@@ -267,11 +272,37 @@
             this.txtTipoContaDescricao.Size = new System.Drawing.Size(132, 22);
             this.txtTipoContaDescricao.TabIndex = 8;
             // 
+            // btnAtualizar
+            // 
+            this.btnAtualizar.Enabled = false;
+            this.btnAtualizar.Location = new System.Drawing.Point(255, 249);
+            this.btnAtualizar.Margin = new System.Windows.Forms.Padding(4);
+            this.btnAtualizar.Name = "btnAtualizar";
+            this.btnAtualizar.Size = new System.Drawing.Size(113, 34);
+            this.btnAtualizar.TabIndex = 36;
+            this.btnAtualizar.Text = "Atualizar";
+            this.btnAtualizar.UseVisualStyleBackColor = true;
+            this.btnAtualizar.Click += new System.EventHandler(this.btnAtualizar_Click);
+            // 
+            // btnDeletar
+            // 
+            this.btnDeletar.Enabled = false;
+            this.btnDeletar.Location = new System.Drawing.Point(376, 249);
+            this.btnDeletar.Margin = new System.Windows.Forms.Padding(4);
+            this.btnDeletar.Name = "btnDeletar";
+            this.btnDeletar.Size = new System.Drawing.Size(113, 34);
+            this.btnDeletar.TabIndex = 35;
+            this.btnDeletar.Text = "Deletar";
+            this.btnDeletar.UseVisualStyleBackColor = true;
+            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click);
+            // 
             // FormContaPoupanca
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1029, 565);
+            this.Controls.Add(this.btnAtualizar);
+            this.Controls.Add(this.btnDeletar);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.ctnClearData);
@@ -317,5 +348,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtBonusDescricao;
+        private System.Windows.Forms.Button btnAtualizar;
+        private System.Windows.Forms.Button btnDeletar;
     }
 }

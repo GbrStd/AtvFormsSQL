@@ -19,6 +19,15 @@ namespace AtvFormsComp
 
         private void btnSaveClient_Click(object sender, EventArgs e)
         {
+            Cliente cliente = criarCliente();
+
+            ClientService.AddCliente(cliente);
+
+            LoadGrid();
+        }
+
+        private Cliente criarCliente()
+        {
             // Cliente
             string name = txtName.Text;
             string phone = txtPhone.Text;
@@ -49,10 +58,7 @@ namespace AtvFormsComp
 
             cliente.Endereco = endereco;
             cliente.Segmento = segmento;
-
-            ClientService.AddCliente(cliente);
-
-            dgvClients.DataSource = ClientService.GetClients();
+            return cliente;
         }
 
         private void FormClient_Load(object sender, EventArgs e)
@@ -75,6 +81,60 @@ namespace AtvFormsComp
             txtState.Clear();
             txtCountry.Clear();
             txtDescription.Clear();
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (dgvClients.CurrentRow == null)
+                return;
+            Object selected = dgvClients.CurrentRow.DataBoundItem;
+            if (selected == null)
+                return;
+            Cliente current = (Cliente)selected;
+            ClientService.DeleteById(current.Id);
+            LoadGrid();
+        }
+
+        private void dgvClients_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvClients.SelectedCells.Count > 0)
+            {
+                btnDeletar.Enabled = true;
+                btnAtualizar.Enabled = true;
+
+                Cliente current = (Cliente)dgvClients.CurrentRow.DataBoundItem;
+
+                txtName.Text = current.Nome;
+                txtPhone.Text = current.Telefone;
+
+                txtDescription.Text = current.Segmento.Descricao.ToString();
+
+                txtStreet.Text = current.Endereco.Logradouro;
+                txtNumber.Text = current.Endereco.Numero.ToString();
+                txtCity.Text = current.Endereco.Cidade;
+                txtState.Text = current.Endereco.Estado;
+                txtCountry.Text = current.Endereco.Estado;
+            }
+        }
+
+        private void btnAtualizar_Click(object sender, EventArgs e)
+        {
+            Object selected = dgvClients.CurrentRow.DataBoundItem;
+
+            if (selected == null)
+                return;
+
+            Cliente current = (Cliente)selected;
+
+            Cliente cliente = criarCliente();
+
+            // pegar os ids
+            cliente.Id = current.Id;
+            cliente.Segmento.Id = current.Segmento.Id;
+
+            ClientService.Update(cliente);
+
+            LoadGrid();
         }
     }
 }

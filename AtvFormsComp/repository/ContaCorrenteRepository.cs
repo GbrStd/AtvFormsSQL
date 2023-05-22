@@ -3,6 +3,7 @@ using AtvFormsComp.model;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Drawing;
 
 namespace AtvFormsComp.repository
 {
@@ -95,5 +96,62 @@ namespace AtvFormsComp.repository
             return contaList;
         }
 
+        public static void Update(ContaCorrente conta)
+        {
+            SqlConnection connection = AppSQLConnection.GetConnection();
+
+            // Get the contaId
+            string strSelectConta = @"SELECT c.Id FROM Conta c WHERE c.Id = @Id;";
+            SqlCommand commandSelect = new SqlCommand(strSelectConta, connection);
+
+            commandSelect.Parameters.Add(new SqlParameter("@Id", conta.Id));
+
+            int id = Convert.ToInt32(commandSelect.ExecuteScalar());
+
+            Conta c = (Conta)conta;
+            c.Id = id;
+
+            commandSelect.Dispose();
+
+            ContaRepository.Update(c);
+
+            // Update conta corrente
+            connection.Open(); // Abre a conexão denovo 
+            string strUpdateContaCorrente = @"UPDATE ContaCorrente SET Limite = @Limite WHERE Id = @Id;";
+
+            SqlCommand commandUpdate = new SqlCommand(strUpdateContaCorrente, connection);
+
+            commandUpdate.Parameters.Add(new SqlParameter("@Id", conta.Id));
+            commandUpdate.Parameters.Add(new SqlParameter("@Limite", conta.Limite));
+
+            commandUpdate.ExecuteNonQuery();
+
+            commandUpdate.Dispose();
+            connection.Close();
+        }
+
+        public static void DeleteById(int id)
+        {
+            SqlConnection connection = AppSQLConnection.GetConnection();
+
+            // Get the contaId
+            string strSelectConta = @"SELECT c.Id FROM Conta c WHERE c.Id = @Id;";
+            SqlCommand commandSelect = new SqlCommand(strSelectConta, connection);
+
+            commandSelect.Parameters.Add(new SqlParameter("@Id", id));
+
+            int contaId = Convert.ToInt32(commandSelect.ExecuteScalar());
+
+            string strDeleteContaCorrente = @"DELETE FROM ContaCorrente WHERE Id = @Id";
+            SqlCommand commandDelete = new SqlCommand(strDeleteContaCorrente, connection);
+
+            commandDelete.Parameters.AddWithValue("Id", id);
+
+            commandDelete.ExecuteNonQuery();
+
+            ContaRepository.DeleteById(contaId);
+
+            connection.Close();
+        }
     }
 }

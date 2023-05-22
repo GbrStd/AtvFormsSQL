@@ -1,5 +1,6 @@
 ﻿using AtvFormsComp.model;
 using AtvFormsComp.repository;
+using System;
 using System.Collections.Generic;
 
 namespace AtvFormsComp.services
@@ -16,5 +17,14 @@ namespace AtvFormsComp.services
             return ContaCorrenteRepository.GetContasCorrentes();
         }
 
+        public static void Update(ContaCorrente conta)
+        {
+            ContaCorrenteRepository.Update(conta);
+        }
+
+        public static void DeleteById(int id)
+        {
+            ContaCorrenteRepository.DeleteById(id);
+        }
     }
 }

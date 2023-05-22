@@ -1,5 +1,6 @@
 ﻿using AtvFormsComp.db;
 using AtvFormsComp.model;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -60,7 +61,6 @@ namespace AtvFormsComp.repository
             conta.TipoConta.ClasseBonus.Id = InsertIfNotExistsAndReturnId("Bonus", connection, conta.TipoConta.ClasseBonus.Descricao);
 
             // Criar um TipoConta se não existir.
-
             string strExists = "SELECT COUNT(*) FROM TipoConta WHERE Descricao = @Descricao;";
             SqlCommand exists = new SqlCommand(strExists, connection);
             exists.Parameters.Add(new SqlParameter("@Descricao", conta.TipoConta.Descricao));
@@ -113,6 +113,39 @@ namespace AtvFormsComp.repository
             connection.Close();
 
             return conta;
+        }
+
+        public static void Update(Conta c)
+        {
+            SqlConnection connection = AppSQLConnection.GetConnection();
+
+            string strUpdate = "UPDATE Conta SET Descricao = @Descricao, Saldo = @Saldo WHERE Id = @Id;";
+
+            SqlCommand update = new SqlCommand(strUpdate, connection);
+
+            update.Parameters.Add(new SqlParameter("@Id", c.Id));
+            update.Parameters.Add(new SqlParameter("@Descricao", c.Descricao));
+            update.Parameters.Add(new SqlParameter("@Saldo", c.Saldo));
+
+            update.ExecuteNonQuery();
+
+            update.Dispose();
+            connection.Close();
+        }
+
+        public static void DeleteById(int id)
+        {
+            SqlConnection connection = AppSQLConnection.GetConnection();
+
+            string strDelete = @"DELETE From Conta WHERE Id = @Id";
+            SqlCommand delete = new SqlCommand(strDelete, connection);
+
+            delete.Parameters.Add(new SqlParameter("Id", id));
+
+            delete.ExecuteNonQuery();
+
+            delete.Dispose();
+            connection.Close();
         }
 
     }

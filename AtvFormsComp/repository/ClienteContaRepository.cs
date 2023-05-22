@@ -32,7 +32,6 @@ namespace AtvFormsComp.repository
 
         public static List<ClienteConta> GetClienteContas()
         {
-
             SqlConnection connection = AppSQLConnection.GetConnection();
 
             string listCommand = "SELECT * FROM ClienteConta;";
@@ -68,5 +67,40 @@ namespace AtvFormsComp.repository
             return clientes;
         }
 
+        public static void Update(ClienteConta clienteConta, int clienteId, int contaPoupancaId, int contaCorrenteId)
+        {
+            SqlConnection connection = AppSQLConnection.GetConnection();
+
+            string strUpdate = "UPDATE ClienteConta SET ClienteId = @NewClienteId, ContaPoupancaId = @NewContaPoupancaId, ContaCorrenteId = @NewContaCorrenteId WHERE ClienteId = @ClienteId AND ContaPoupancaId = @ContaPoupancaId AND ContaCorrenteId = @ContaCorrenteId;";
+
+            SqlCommand cmdUpdate = new SqlCommand(strUpdate, connection);
+
+            cmdUpdate.Parameters.Add(new SqlParameter("@ClienteId", clienteConta.Cliente.Id));
+            cmdUpdate.Parameters.Add(new SqlParameter("@ContaPoupancaId", clienteConta.ContaPoupanca.Id));
+            cmdUpdate.Parameters.Add(new SqlParameter("@ContaCorrenteId", clienteConta.ContaCorrente.Id));
+
+            cmdUpdate.Parameters.Add(new SqlParameter("@NewClienteId", clienteId));
+            cmdUpdate.Parameters.Add(new SqlParameter("@NewContaPoupancaId", contaPoupancaId));
+            cmdUpdate.Parameters.Add(new SqlParameter("@NewContaCorrenteId", contaCorrenteId));
+
+            cmdUpdate.ExecuteNonQuery();
+
+            connection.Close();
+        }
+
+        public static void DeleteById(int clienteId, int contaPoupancaId, int contaCorrenteId)
+        {
+            SqlConnection connection = AppSQLConnection.GetConnection();
+
+            string strDelete = "DELETE FROM ClienteConta WHERE ClienteId = @ClienteId AND ContaPoupancaId = @ContaPoupancaId AND ContaCorrenteId = @ContaCorrenteId;";
+            SqlCommand cmdDelete = new SqlCommand(strDelete, connection);
+
+            cmdDelete.Parameters.Add(new SqlParameter("@ClienteId", clienteId));
+            cmdDelete.Parameters.Add(new SqlParameter("@ContaPoupancaId", contaPoupancaId));
+            cmdDelete.Parameters.Add(new SqlParameter("@ContaCorrenteId", contaCorrenteId));
+
+            cmdDelete.ExecuteNonQuery();
+            connection.Close();
+        }
     }
 }

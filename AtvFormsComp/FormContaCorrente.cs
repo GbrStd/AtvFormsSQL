@@ -1,7 +1,9 @@
 ﻿using AtvFormsComp.model;
 using AtvFormsComp.services;
 using System;
+using System.Net.NetworkInformation;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace AtvFormsComp
 {
@@ -13,6 +15,15 @@ namespace AtvFormsComp
         }
 
         private void btnSaveContaCorrente_Click(object sender, EventArgs e)
+        {
+            ContaCorrente contaCorrente = criarContaCorrente();
+
+            ContaCorrenteService.AddContaCorrente(contaCorrente);
+
+            LoadGrid();
+        }
+
+        private ContaCorrente criarContaCorrente()
         {
             ContaCorrente contaCorrente = new ContaCorrente();
 
@@ -38,15 +49,11 @@ namespace AtvFormsComp
             contaCorrente.TipoConta = tipoConta;
 
             contaCorrente.Limite = Convert.ToDecimal(txtLimite.Text);
-
-            ContaCorrenteService.AddContaCorrente(contaCorrente);
-            LoadGrid();
-
+            return contaCorrente;
         }
 
         private void LoadGrid()
         {
-            dgvContaCorrente.DataSource = null;
             dgvContaCorrente.DataSource = ContaCorrenteService.GetContasCorrentes();
         }
 
@@ -63,6 +70,57 @@ namespace AtvFormsComp
         private void FormContaCorrente_Load(object sender, EventArgs e)
         {
             LoadGrid();
+        }
+
+        private void btnAtualizar_Click(object sender, EventArgs e)
+        {
+            Object selected = dgvContaCorrente.CurrentRow.DataBoundItem;
+
+            if (selected == null)
+                return;
+
+            ContaCorrente current = (ContaCorrente)selected;
+
+            ContaCorrente conta = criarContaCorrente();
+
+            // pegar os ids
+            conta.Id = current.Id;
+            conta.TipoMoeda.Id = current.TipoMoeda.Id;
+            conta.TipoConta.Id = current.TipoConta.Id;
+
+            ContaCorrenteService.Update(conta);
+
+            LoadGrid();
+        }
+
+        private void btnDeletar_Click(object sender, EventArgs e)
+        {
+            if (dgvContaCorrente.CurrentRow == null)
+                return;
+            Object selected = dgvContaCorrente.CurrentRow.DataBoundItem;
+            if (selected == null)
+                return;
+            ContaCorrente current = (ContaCorrente)selected;
+            ContaCorrenteService.DeleteById(current.Id);
+            LoadGrid();
+        }
+
+        private void dgvContaCorrente_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvContaCorrente.SelectedCells.Count > 0)
+            {
+                btnDeletar.Enabled = true;
+                btnAtualizar.Enabled = true;
+
+                ContaCorrente current = (ContaCorrente)dgvContaCorrente.CurrentRow.DataBoundItem;
+
+                txtDescricao.Text = current.Descricao;
+                txtTipoMoedaDescricao.Text = current.TipoMoeda.Descricao;
+                txtSaldo.Text = current.Saldo.ToString();
+                txtTipoContaDescricao.Text = current.TipoConta.Descricao;
+                txtBonusDescricao.Text = current.TipoConta.ClasseBonus.Descricao;
+                txtLimite.Text = current.Limite.ToString();
+            }
         }
     }
 }

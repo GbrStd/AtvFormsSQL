@@ -38,6 +38,8 @@
             this.txtIdCliente = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtIdContaPoupanca = new System.Windows.Forms.TextBox();
+            this.btnAtualizar = new System.Windows.Forms.Button();
+            this.btnDeletar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvContaCliente)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -51,6 +53,7 @@
             this.ctnClearData.TabIndex = 24;
             this.ctnClearData.Text = "Limpar";
             this.ctnClearData.UseVisualStyleBackColor = true;
+            this.ctnClearData.Click += new System.EventHandler(this.ctnClearData_Click);
             // 
             // btnSaveContaCliente
             // 
@@ -66,12 +69,15 @@
             // dgvContaCliente
             // 
             this.dgvContaCliente.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvContaCliente.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvContaCliente.Location = new System.Drawing.Point(13, 314);
             this.dgvContaCliente.Margin = new System.Windows.Forms.Padding(4);
             this.dgvContaCliente.Name = "dgvContaCliente";
             this.dgvContaCliente.RowHeadersWidth = 51;
             this.dgvContaCliente.Size = new System.Drawing.Size(1004, 238);
             this.dgvContaCliente.TabIndex = 22;
+            this.dgvContaCliente.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvContaCliente_CellContentClick);
+            this.dgvContaCliente.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvContaCliente_CellContentClick);
             // 
             // groupBox2
             // 
@@ -144,11 +150,37 @@
             this.txtIdContaPoupanca.Size = new System.Drawing.Size(183, 22);
             this.txtIdContaPoupanca.TabIndex = 2;
             // 
+            // btnAtualizar
+            // 
+            this.btnAtualizar.Enabled = false;
+            this.btnAtualizar.Location = new System.Drawing.Point(255, 272);
+            this.btnAtualizar.Margin = new System.Windows.Forms.Padding(4);
+            this.btnAtualizar.Name = "btnAtualizar";
+            this.btnAtualizar.Size = new System.Drawing.Size(113, 34);
+            this.btnAtualizar.TabIndex = 36;
+            this.btnAtualizar.Text = "Atualizar";
+            this.btnAtualizar.UseVisualStyleBackColor = true;
+            this.btnAtualizar.Click += new System.EventHandler(this.btnAtualizar_Click);
+            // 
+            // btnDeletar
+            // 
+            this.btnDeletar.Enabled = false;
+            this.btnDeletar.Location = new System.Drawing.Point(376, 272);
+            this.btnDeletar.Margin = new System.Windows.Forms.Padding(4);
+            this.btnDeletar.Name = "btnDeletar";
+            this.btnDeletar.Size = new System.Drawing.Size(113, 34);
+            this.btnDeletar.TabIndex = 35;
+            this.btnDeletar.Text = "Deletar";
+            this.btnDeletar.UseVisualStyleBackColor = true;
+            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click);
+            // 
             // FormContaCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1030, 565);
+            this.Controls.Add(this.btnAtualizar);
+            this.Controls.Add(this.btnDeletar);
             this.Controls.Add(this.ctnClearData);
             this.Controls.Add(this.btnSaveContaCliente);
             this.Controls.Add(this.dgvContaCliente);
@@ -175,5 +207,7 @@
         private System.Windows.Forms.TextBox txtIdContaPoupanca;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtIdContaCorrente;
+        private System.Windows.Forms.Button btnAtualizar;
+        private System.Windows.Forms.Button btnDeletar;
     }
 }

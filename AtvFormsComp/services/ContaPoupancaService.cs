@@ -15,5 +15,16 @@ namespace AtvFormsComp.services
         {
             return ContaPoupancaRepository.GetContasPoupanca();
         }
+
+        public static void Update(ContaPoupanca poupanca)
+        {
+            ContaPoupancaRepository.Update(poupanca);
+        }
+
+        public static void DeleteById(int id)
+        {
+            ContaPoupancaRepository.DeleteById(id);
+        }
+
     }
 }

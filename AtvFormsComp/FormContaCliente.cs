@@ -22,6 +22,15 @@ namespace AtvFormsComp
 
         private void btnSaveContaCliente_Click(object sender, EventArgs e)
         {
+            ClienteConta clienteConta = criarClienteConta();
+
+            ClienteContaRepository.AddClienteConta(clienteConta);
+
+            LoadGrid();
+        }
+
+        private ClienteConta criarClienteConta()
+        {
             ClienteConta clienteConta = new ClienteConta();
             ContaPoupanca contaPoupanca = new ContaPoupanca();
             ContaCorrente contaCorrente = new ContaCorrente();
@@ -36,10 +45,7 @@ namespace AtvFormsComp
             clienteConta.ContaCorrente = contaCorrente;
 
             clienteConta.Data = DateTime.Now;
-
-            ClienteContaRepository.AddClienteConta(clienteConta);
-
-            LoadGrid();
+            return clienteConta;
         }
 
         private void LoadGrid()
@@ -52,5 +58,50 @@ namespace AtvFormsComp
             LoadGrid();
         }
 
+        private void ctnClearData_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgvContaCliente_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvContaCliente.SelectedCells.Count > 0)
+            {
+                btnDeletar.Enabled = true;
+                btnAtualizar.Enabled = true;
+
+                ClienteConta current = (ClienteConta)dgvContaCliente.CurrentRow.DataBoundItem;
+
+                txtIdCliente.Text = current.Cliente.Id.ToString();
+                txtIdContaCorrente.Text = current.ContaCorrente.Id.ToString();
+                txtIdContaPoupanca.Text = current.ContaPoupanca.Id.ToString();
+            }
+        }
+
+        private void btnAtualizar_Click(object sender, EventArgs e)
+        {
+            Object selected = dgvContaCliente.CurrentRow.DataBoundItem;
+
+            if (selected == null)
+                return;
+
+            ClienteConta current = (ClienteConta)selected;
+
+            ClienteContaRepository.Update(current, Convert.ToInt32(txtIdCliente.Text), Convert.ToInt32(txtIdContaPoupanca.Text), Convert.ToInt32(txtIdContaCorrente.Text));
+
+            LoadGrid();
+        }
+
+        private void btnDeletar_Click(object sender, EventArgs e)
+        {
+            if (dgvContaCliente.CurrentRow == null)
+                return;
+            Object selected = dgvContaCliente.CurrentRow.DataBoundItem;
+            if (selected == null)
+                return;
+            ClienteConta current = (ClienteConta)selected;
+            ClienteContaRepository.DeleteById(current.Cliente.Id, current.ContaPoupanca.Id, current.ContaCorrente.Id);
+            LoadGrid();
+        }
     }
 }
